@@ -22,9 +22,11 @@ With a simple annotation `@ParseClass` you can take this:
 and generate this:
 
     public final class ParseModel {
+    
+        private ParseModel(){}
         
         @ParseClassName("Person")
-        public static final class Person extends ParseObject {
+        public static class Person extends ParseObject {
         
             public static final String KEY_NAME = "name";
         
@@ -38,7 +40,7 @@ and generate this:
                 ParseObject.registerSubclass(Person.class);
             }
         
-            public static ParseQuery<Person> getQuery() {
+            public final static ParseQuery<Person> getQuery() {
                 return ParseQuery.getQuery(Person.class);
             }
         
@@ -114,7 +116,10 @@ Create a `builder` class for any of your Parse Data classes:
             ParseFile photo;
         }
     
-   after `Rebuild` you can call e.g.: `ParseModel.Person.getName();`
+   after `Rebuild` you can call e.g.:
+   
+        ParseModel.Person person = new ParseModel.Person();
+        person.setName("Bartosz");
 
 Including In Your Project
 -------------------------

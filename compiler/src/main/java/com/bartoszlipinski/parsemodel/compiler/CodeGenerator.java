@@ -67,7 +67,10 @@ public class CodeGenerator {
 
     public static TypeSpec.Builder generateParseModelClass() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(CLASS_NAME)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addMethod(MethodSpec.constructorBuilder()
+                        .addModifiers(Modifier.PRIVATE)
+                        .build());
         return builder;
     }
 
@@ -80,7 +83,10 @@ public class CodeGenerator {
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(classNameUC)
                 .superclass(ParseObject.class)
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addMethod(MethodSpec.constructorBuilder()
+                        .addModifiers(Modifier.PUBLIC)
+                        .build())
                 .addAnnotation(AnnotationSpec.builder(ParseClassName.class)
                         .addMember("value", "$S", classNameUC)
                         .build())
@@ -88,7 +94,7 @@ public class CodeGenerator {
                         .addStatement(STATIC_BLOCK_STATEMENT, classNameUC)
                         .build())
                 .addMethod(MethodSpec.methodBuilder(STATIC_GET_QUERY_METHOD_NAME)
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                         .returns(parseQueryOfThisElement)
                         .addStatement(STATIC_GET_QUERY_METHOD_RETURN_STATEMENT, classNameUC)
                         .build());
@@ -135,7 +141,7 @@ public class CodeGenerator {
         ClassName parseUser = ClassName.get("com.parse", "ParseUser");
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(classNameUC)
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addField(parseUser, USER_FIELD_NAME, Modifier.PRIVATE, Modifier.FINAL)
                 .addMethod(MethodSpec.constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
