@@ -39,6 +39,8 @@ and generate this:
             static {
                 ParseObject.registerSubclass(Person.class);
             }
+            
+            public Person() {}
         
             public final static ParseQuery<Person> getQuery() {
                 return ParseQuery.getQuery(Person.class);
