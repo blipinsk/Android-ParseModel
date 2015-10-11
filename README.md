@@ -88,18 +88,19 @@ About the release
 
 **TLDR:** ***Library functions are working correctly, don't be afraid to use it. I just still haven't decided if I like the compiler output. This might change in the future.***
 
-Although the library should work correctly (it should correctly generate Parse SDK model), I decided that the current state is far from being out of the development stage. I decided to release it right now (in the current form), because I know it can be very useful for many developers (already, as it is). I don't think any of the library functionality will change (only some new feature can be introduced; feel free to an issue with a needed feature). There are few things I need to do before I move to the first "production" version of the library:
+Although the library should work correctly (it should correctly generate Parse SDK model), I decided that the current state is far from being out of the development stage. I decided to release it right now (in the current form), because I know it can be very useful for many developers (already, as it is). I don't think any of the library functionality will change (only some new feature can be introduced; feel free to add an issue with a needed feature). There are few things I need to do before I move to the first "production" version of the library:
 
-  1. Do a refactoring of the compiler code.
-  2. Decide whether I should stay with current annotation names, or change them (maybe `@ParseModelBuilder`?)
-  3. Decide if I'm fine with the current `ParseModel` code organization (maybe instead of `ParseModel` inner classes a set of seperate classes should be generated?). If not -> change it.
+  1. Introduce code validator.
+  2. Do a refactoring of the compiler code.
+  3. Decide whether I should stay with current annotation names, or change them (maybe to `@ParseModelBuilder`?)
+  4. Decide if I'm fine with the current `ParseModel` code organization (maybe instead of `ParseModel` inner classes a set of separate classes should be generated?).
 
 Usage
 =====
 *For a working implementation of this library see the `sample/` folder.*
 
 There are two annotations in the library: `@ParseClass` and `@ParseUserClass`. You should use the latter one for your `User` model (it works a bit differently).
-*Classes annotated with any of those two annotations are being later called `Android-ParseModel` `builder` classes*
+*Classes annotated with any of those two annotations are later being called `Android-ParseModel` `builder` classes*
 
 Create a `builder` class for any of your Parse Data classes:
 
@@ -118,10 +119,11 @@ Create a `builder` class for any of your Parse Data classes:
             ParseFile photo;
         }
     
-   after `Rebuild` you can call e.g.:
+   after `Rebuild` you can use `ParseModel.Person` class. E.g. you can call:
    
         ParseModel.Person person = new ParseModel.Person();
         person.setName("Bartosz");
+        person.saveInBackground();
 
 Including In Your Project
 -------------------------
