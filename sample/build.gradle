@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt' // <-- THIS IS IMPORTANT
+
+repositories {
+    maven {
+        url 'https://dl.bintray.com/blipinsk/maven/'
+        // you probably don't really need that - its only needed if the current version is not yet available in jcenter
+    }
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.bartoszlipinski.parsemodel.sample"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 0
+        versionName "0.0.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+//    really NOT important comments:
+//    --
+//    compile project(':annotations')
+//    apt project(':compiler')
+//    --
+
+    compile 'com.bartoszlipinski:parsemodel:0.0.2-alpha' // <-- THIS IS ALSO IMPORTANT
+    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.2-alpha' // <-- AND THIS AS WELL
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.parse.bolts:bolts-android:1.2.1'
+    compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+}
