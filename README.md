@@ -77,10 +77,12 @@ and generate this:
 
         
 
-About the release (Or in other words: why is it marked as 'alpha'?)
-===================================================================
+About the release
+=================
+(or in other words: why is it marked as 'alpha'?)
+-------------------------------------------------
 
-
+TODO
 
 
 Usage
@@ -95,23 +97,23 @@ Create a `builder` class for any of your Parse Data classes:
   1. Create a new class.
   2. Add appropriate fields (you should be able to use any type that is available in Parse; you can also use other `builder` classes).
   3. Add an annotation `@ParseClass` (or `@ParseUserClass`) to your class.
-  4. Hit `Build->Rebuild Project`
+  4. Hit `Build -> Rebuild Project`
   5. And you're done... You can reference it with `ParseModel.<BuilderClassName>`.
 
 
-    @ParseClass
-    public class Person {
-        String name;
-        String surname;
-        Date birthDate;
-        ParseFile photo;
-    }
+        @ParseClass
+        public class Person {
+            String name;
+            String surname;
+            Date birthDate;
+            ParseFile photo;
+        }
     
-  after Rebuild you can call e.g.: `ParseModel.Person.getName();`
+   after `Rebuild` you can call e.g.: `ParseModel.Person.getName();`
 
 Including In Your Project
 -------------------------
-Add this to your **PROJECT** gradle dependencies:
+Add this to your **project** gradle dependencies:
 
 ```xml
 dependencies {
@@ -134,7 +136,7 @@ dependencies {
 }
 ```
 
-ADDITIONALLY: (if the current version is not yet available in jcenter) add this as well:
+***additionally***: *(if the current version is not available in central repository yet) add this as well:*
 
 ```xml
 repositories {
