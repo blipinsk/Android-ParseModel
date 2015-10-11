@@ -20,7 +20,7 @@ ext {
     groupId = 'com.bartoszlipinski'
     uploadName = 'Android-ParseModel'
     description = 'Annotation-based library that allows for easy data model creation for Parse Android SDK'
-    publishVersion = '0.0.2-alpha'
+    publishVersion = '0.0.3-alpha'
     website = 'https://github.com/blipinsk/Android-ParseModel'
     licences = ['Apache-2.0']
     dryRun = 'false'
