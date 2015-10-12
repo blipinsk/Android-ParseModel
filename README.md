@@ -76,19 +76,6 @@ and generate this:
     }
         
 
-About the release
-=================
-(or in other words: why is it marked as `alpha`?)
-
-**TLDR:** ***Library functions are working correctly, don't be afraid to use it. I just still haven't decided if I like the compiler output. This might change in the future.***
-
-Although the library should work correctly (it should correctly generate Parse SDK model), I decided that the current state is far from being out of the development stage. I decided to release it right now (in the current form), because I know it can be very useful for many developers (already, as it is). I don't think any of the library functionality will change (only some new feature can be introduced; feel free to add an issue with a needed feature). There are few things I need to do before I move to the first "production" version of the library:
-
-  1. Introduce code validator.
-  2. Do a refactoring of the compiler code.
-  3. Decide whether I should stay with current annotation names, or change them (maybe to `@ParseModelBuilder`?)
-  4. Decide if I'm fine with the current `ParseModel` code organization (maybe instead of `ParseModel` inner classes a set of separate classes should be generated?).
-
 Usage
 =====
 *For a working implementation of this library see the `sample/` folder.*
@@ -215,6 +202,19 @@ repositories {
     }
 }
 ```
+
+About the release
+=================
+(or in other words: why is it marked as `alpha`?)
+
+**TLDR:** ***Library functions are working correctly, don't be afraid to use it. I just still haven't decided if I like the compiler output. This might change in the future.***
+
+Although the library should work correctly (it should correctly generate Parse SDK model), I decided that the current state is far from being out of the development stage. I decided to release it right now (in the current form), because I know it can be very useful for many developers (already, as it is). I don't think any of the library functionality will change (only some new feature can be introduced; feel free to add an issue with a needed feature). There are few things I need to do before I move to the first "production" version of the library:
+
+  1. Introduce code validator.
+  2. Do a refactoring of the compiler code.
+  3. Decide whether I should stay with current annotation names, or change them (maybe to `@ParseModelBuilder`?)
+  4. Decide if I'm fine with the current `ParseModel` code organization (maybe instead of `ParseModel` inner classes a set of separate classes should be generated?).
 
 Developed by
 ============
