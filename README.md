@@ -20,66 +20,60 @@ With a simple annotation `@ParseClass` you can take this:
     }
         
 and generate this:
-
-    public final class ParseModel {
+        
+    @ParseClassName("Person")
+    public static class Person extends ParseObject {
     
-        private ParseModel(){}
+        public static final String KEY_NAME = "name";
+    
+        public static final String KEY_SURNAME = "surname";
+    
+        public static final String KEY_BIRTH_DATE = "birthDate";
+    
+        public static final String KEY_PHOTO = "photo";
+    
+        static {
+            ParseObject.registerSubclass(Person.class);
+        }
         
-        @ParseClassName("Person")
-        public static class Person extends ParseObject {
-        
-            public static final String KEY_NAME = "name";
-        
-            public static final String KEY_SURNAME = "surname";
-        
-            public static final String KEY_BIRTH_DATE = "birthDate";
-        
-            public static final String KEY_PHOTO = "photo";
-        
-            static {
-                ParseObject.registerSubclass(Person.class);
-            }
-            
-            public Person() {}
-        
-            public final static ParseQuery<Person> getQuery() {
-                return ParseQuery.getQuery(Person.class);
-            }
-        
-            public final void setName(String name) {
-                put(KEY_NAME, name);
-            }
-        
-            public final String getName() {
-                return getString(KEY_NAME);
-            }
-        
-            public final void setSurname(String surname) {
-                put(KEY_SURNAME, surname);
-            }
-        
-            public final String getSurname() {
-                return getString(KEY_SURNAME);
-            }
-        
-            public final void setBirthDate(Date birthDate) {
-                put(KEY_BIRTH_DATE, birthDate);
-            }
-        
-            public final Date getBirthDate() {
-                return getDate(KEY_BIRTH_DATE);
-            }
-        
-            public final void setPhoto(ParseFile photo) {
-                put(KEY_PHOTO, photo);
-            }
-        
-            public final ParseFile getPhoto() {
-                return getParseFile(KEY_PHOTO);
-            }
+        public Person() {}
+    
+        public final static ParseQuery<Person> getQuery() {
+            return ParseQuery.getQuery(Person.class);
+        }
+    
+        public final void setName(String name) {
+            put(KEY_NAME, name);
+        }
+    
+        public final String getName() {
+            return getString(KEY_NAME);
+        }
+    
+        public final void setSurname(String surname) {
+            put(KEY_SURNAME, surname);
+        }
+    
+        public final String getSurname() {
+            return getString(KEY_SURNAME);
+        }
+    
+        public final void setBirthDate(Date birthDate) {
+            put(KEY_BIRTH_DATE, birthDate);
+        }
+    
+        public final Date getBirthDate() {
+            return getDate(KEY_BIRTH_DATE);
+        }
+    
+        public final void setPhoto(ParseFile photo) {
+            put(KEY_PHOTO, photo);
+        }
+    
+        public final ParseFile getPhoto() {
+            return getParseFile(KEY_PHOTO);
         }
     }
-
         
 
 About the release
@@ -106,7 +100,7 @@ Create a `builder` class for any of your Parse Data classes:
 
   1. Create a new class.
   2. Add appropriate fields (you should be able to use any type that is available in Parse; you can also use other `builder` classes).
-  3. Add an annotation `@ParseClass` (or `@ParseUserClass`) to your class.
+  3. Add an annotation `@ParseClass` to your class.
   4. Hit `Build -> Rebuild Project`
   5. And you're done... You can reference it with `ParseModel.<BuilderClassName>`.
 
@@ -124,6 +118,68 @@ Create a `builder` class for any of your Parse Data classes:
         ParseModel.Person person = new ParseModel.Person();
         person.setName("Bartosz");
         person.saveInBackground();
+
+If you want to generate a `ParseModel` class for your `Parse` `User`, follow the exact same steps but use `@ParseUserClass` annotation (instead of  `@ParseClass`). This annotation generates code a bit differently. E.g. this `User` `builder` class:
+
+    @ParseUserClass
+    public class User {
+        String fullName;
+        int age;
+    }
+
+will result in generation of this:
+
+    public static class User {
+        public static final String KEY_FULL_NAME = "fullName";
+        
+        public static final String KEY_AGE = "age";
+        
+        private final ParseUser mParseUser;
+        
+        public User(ParseUser parseUser) {
+            mParseUser = parseUser;
+            mParseUser.fetchInBackground();
+        }
+        
+        public static User with(ParseUser parseUser) {
+            return new User(parseUser);
+        }
+        
+        public static User getCurrentUser() {
+            return ParseUser.getCurrentUser() != null ? User.with(ParseUser.getCurrentUser()) : null;
+        }
+        
+        public ParseUser get() {
+            return mParseUser;
+        }
+        
+        public final void setFullName(String fullName) {
+            mParseUser.put(KEY_FULL_NAME, fullName);
+        }
+        
+        public final String getFullName() {
+            return mParseUser.getString(KEY_FULL_NAME);
+        }
+        
+        public final void setAge(int age) {
+            mParseUser.put(KEY_AGE, age);
+        }
+        
+        public final int getAge() {
+            return mParseUser.getInt(KEY_AGE);
+        }
+    }
+        
+Usage notes
+-----------
+
+The library assumes two things considering naming conventions:
+ 
+  1. *Classes* should be named using `UpperCamelCase` ("ThisIsAnExample")
+  2. *Fields* should be named using `LowerCamelCase` ("thisIsAnExample")
+  
+**It doesn't mean the library won't work if you name your classes/fields differently!**
+It can just case some unexpected method names (it depends on the `quava` methods behaviour).
 
 Including In Your Project
 -------------------------
