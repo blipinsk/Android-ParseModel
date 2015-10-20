@@ -144,7 +144,7 @@ public class CodeGenerator {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addField(parseUser, USER_FIELD_NAME, Modifier.PRIVATE, Modifier.FINAL)
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PUBLIC)
+                        .addModifiers(Modifier.PRIVATE)
                         .addParameter(parseUser, USER_CONSTRUCTOR_ARGUMENT_NAME)
                         .addStatement(USER_CONSTRUCTOR_FIRST_STATEMENT)
                         .addStatement(USER_CONSTRUCTOR_SECOND_STATEMENT)

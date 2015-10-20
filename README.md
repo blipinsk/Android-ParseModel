@@ -2,7 +2,6 @@ Android-ParseModel
 ==================
 
 [![License](https://img.shields.io/github/license/blipinsk/RecyclerViewHeader.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Maven Central](https://img.shields.io/maven-central/v/com.bartoszlipinski/parsemodel.svg)](http://gradleplease.appspot.com/#parsemodel)
 [![Bintray](https://img.shields.io/bintray/v/blipinsk/maven/Android-ParseModel.svg)](https://bintray.com/blipinsk/maven/Android-ParseModel/_latestVersion)
 
 Annotation-based library that allows for easy data model creation for Parse Android SDK.
@@ -123,7 +122,7 @@ will result in generation of this:
         
         private final ParseUser mParseUser;
         
-        public User(ParseUser parseUser) {
+        private User(ParseUser parseUser) {
             mParseUser = parseUser;
             mParseUser.fetchInBackground();
         }
