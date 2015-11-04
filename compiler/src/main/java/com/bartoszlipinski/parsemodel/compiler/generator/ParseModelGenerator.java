@@ -1,39 +1,55 @@
 /**
  * Copyright 2015 Bartosz Lipinski
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bartoszlipinski.parsemodel.compiler;
+package com.bartoszlipinski.parsemodel.compiler.generator;
 
+import com.bartoszlipinski.parsemodel.ParseClass;
+import com.bartoszlipinski.parsemodel.ParseUserClass;
+import com.bartoszlipinski.parsemodel.compiler.AnnotatedClass;
+import com.bartoszlipinski.parsemodel.compiler.Logger;
+import com.bartoszlipinski.parsemodel.compiler.Utils;
+import com.bartoszlipinski.parsemodel.compiler.exception.TooManyParseUserClassAnnotatedException;
 import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
+import com.bartoszlipinski.parsemodel.compiler.generator.BaseGenerator;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
 
 import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 
-public class CodeGenerator {
+public class ParseModelGenerator extends BaseGenerator {
 
     public static final String CLASS_NAME = "ParseModel";
 
@@ -65,13 +81,58 @@ public class CodeGenerator {
 
     private static final String GET_PARSE_USER_METHOD_RETURN_STATEMENT = "return " + USER_FIELD_NAME;
 
-    public static TypeSpec.Builder generateParseModelClass() {
-        TypeSpec.Builder builder = TypeSpec.classBuilder(CLASS_NAME)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addMethod(MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PRIVATE)
-                        .build());
-        return builder;
+
+    @Override
+    public Class[] getAnnotations() {
+        return new Class[]{ParseClass.class, ParseUserClass.class};
+    }
+
+    @Override
+    public void generate(RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
+        try {
+            List<AnnotatedClass> annotatedClasses = new ArrayList<>();
+            for (Element element : roundEnv.getElementsAnnotatedWith(ParseClass.class)) {
+                // Our annotation is defined with @Target(value=TYPE). Therefore, we can assume that
+                // this element is a TypeElement.
+                TypeElement annotatedElement = (TypeElement) element;
+                annotatedClasses.add(AnnotatedClass.with(annotatedElement));
+            }
+            Set<? extends Element> parseUserElements = roundEnv.getElementsAnnotatedWith(ParseUserClass.class);
+            AnnotatedClass userAnnotatedClass = null;
+            if (parseUserElements.size() > 1) {
+                throw new TooManyParseUserClassAnnotatedException();
+            }
+            for (Element element : parseUserElements) {
+                userAnnotatedClass = AnnotatedClass.with((TypeElement) element);
+            }
+
+            String packageName = Utils.getMainPackageName(processingEnv.getElementUtils(), annotatedClasses, userAnnotatedClass);
+            FieldType.setPackageName(packageName);
+
+            for (AnnotatedClass annotatedClass : annotatedClasses) { //we need to have all annotated class names before we can process fields
+                annotatedClass.processFields();
+            }
+            if (userAnnotatedClass != null) {
+                userAnnotatedClass.processFields();
+            }
+
+            TypeSpec.Builder generatedClass = generateParseModelClass();
+            for (AnnotatedClass annotatedClass : annotatedClasses) {
+                generatedClass.addType(generateParseModelElementClass(packageName, annotatedClass));
+            }
+            if (userAnnotatedClass != null) {
+                generatedClass.addType(generateParseModelUserElementClass(packageName, userAnnotatedClass));
+            }
+
+            JavaFile javaFile = JavaFile.builder(packageName, generatedClass.build()).build();
+            javaFile.writeTo(processingEnv.getFiler());
+        } catch (IndexOutOfBoundsException e) {
+            Logger.getInstance().warning("Don't mind me... " +
+                    "I'm just a friendly warning on an Exception that seems to be happening on a pseudo-random manner. " +
+                    "Don't worry, I won't prevent Android-ParseModel from working correctly.");
+        } catch (Exception e) {
+            Logger.getInstance().error(e.getMessage());
+        }
     }
 
     public static TypeSpec generateParseModelElementClass(String packageName, AnnotatedClass annotated) {
@@ -200,5 +261,14 @@ public class CodeGenerator {
         }
 
         return builder.build();
+    }
+
+    public static TypeSpec.Builder generateParseModelClass() {
+        TypeSpec.Builder builder = TypeSpec.classBuilder(CLASS_NAME)
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addMethod(MethodSpec.constructorBuilder()
+                        .addModifiers(Modifier.PRIVATE)
+                        .build());
+        return builder;
     }
 }

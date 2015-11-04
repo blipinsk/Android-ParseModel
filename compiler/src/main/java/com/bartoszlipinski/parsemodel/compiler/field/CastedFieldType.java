@@ -15,7 +15,7 @@
  */
 package com.bartoszlipinski.parsemodel.compiler.field;
 
-import com.bartoszlipinski.parsemodel.compiler.CodeGenerator;
+import com.bartoszlipinski.parsemodel.compiler.generator.ParseModelGenerator;
 import com.squareup.javapoet.TypeName;
 
 public class CastedFieldType extends FieldType {
@@ -24,7 +24,7 @@ public class CastedFieldType extends FieldType {
 
     private static final String GETTER_STATEMENT_BASE = "return (%s)get%s($L)";
 
-    private static final String USER_GETTER_STATEMENT_BASE = "return (%s)" + CodeGenerator.USER_FIELD_NAME + ".get%s($L)";
+    private static final String USER_GETTER_STATEMENT_BASE = "return (%s)" + ParseModelGenerator.USER_FIELD_NAME + ".get%s($L)";
 
     private final String mCastedTo;
 
