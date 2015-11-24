@@ -1,25 +1,30 @@
 /**
  * Copyright 2015 Bartosz Lipinski
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bartoszlipinski.parsemodel.compiler;
+package com.bartoszlipinski.parsemodel.compiler.generator;
 
 import com.bartoszlipinski.parsemodel.ParseClass;
 import com.bartoszlipinski.parsemodel.ParseUserClass;
-import com.bartoszlipinski.parsemodel.compiler.exception.TooManyParseUserClassAnnotatedException;
+import com.bartoszlipinski.parsemodel.compiler.utils.AnnotatedClass;
+import com.bartoszlipinski.parsemodel.compiler.utils.Logger;
+import com.bartoszlipinski.parsemodel.compiler.utils.Utils;
+import com.bartoszlipinski.parsemodel.compiler.code.ModelElementCodeGenerator;
+import com.bartoszlipinski.parsemodel.compiler.code.ModelCodeGenerator;
+import com.bartoszlipinski.parsemodel.compiler.code.ModelUserElementCodeGenerator;
+import com.bartoszlipinski.parsemodel.compiler.exception.TooManyAnnotationsException;
 import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
-import com.google.auto.service.AutoService;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 
@@ -27,37 +32,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Processor;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-import static com.bartoszlipinski.parsemodel.compiler.CodeGenerator.generateParseModelClass;
-import static com.bartoszlipinski.parsemodel.compiler.CodeGenerator.generateParseModelElementClass;
-import static com.bartoszlipinski.parsemodel.compiler.CodeGenerator.generateParseModelUserElementClass;
-import static java.util.Collections.singleton;
-import static javax.lang.model.SourceVersion.latestSupported;
+public class ParseModelGenerator extends BaseGenerator {
 
-@AutoService(Processor.class)
-public class ParseModelProcessor extends AbstractProcessor {
 
     @Override
-    public Set getSupportedAnnotationTypes() {
-        return singleton(ParseClass.class.getCanonicalName());
+    public Class[] getAnnotations() {
+        return new Class[]{ParseClass.class, ParseUserClass.class};
     }
 
     @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return latestSupported();
-    }
-
-    @Override
-    public boolean process(Set annotations, RoundEnvironment roundEnv) {
+    public void generate(RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
         try {
-            Logger.initialize(processingEnv);
-
             List<AnnotatedClass> annotatedClasses = new ArrayList<>();
             for (Element element : roundEnv.getElementsAnnotatedWith(ParseClass.class)) {
                 // Our annotation is defined with @Target(value=TYPE). Therefore, we can assume that
@@ -68,7 +58,7 @@ public class ParseModelProcessor extends AbstractProcessor {
             Set<? extends Element> parseUserElements = roundEnv.getElementsAnnotatedWith(ParseUserClass.class);
             AnnotatedClass userAnnotatedClass = null;
             if (parseUserElements.size() > 1) {
-                throw new TooManyParseUserClassAnnotatedException();
+                throw new TooManyAnnotationsException();
             }
             for (Element element : parseUserElements) {
                 userAnnotatedClass = AnnotatedClass.with((TypeElement) element);
@@ -84,12 +74,14 @@ public class ParseModelProcessor extends AbstractProcessor {
                 userAnnotatedClass.processFields();
             }
 
-            TypeSpec.Builder generatedClass = generateParseModelClass();
+            TypeSpec.Builder generatedClass = ModelCodeGenerator.generate();
             for (AnnotatedClass annotatedClass : annotatedClasses) {
-                generatedClass.addType(generateParseModelElementClass(packageName, annotatedClass));
+                generatedClass.addType(
+                        ModelElementCodeGenerator.generate(packageName, annotatedClass).build());
             }
             if (userAnnotatedClass != null) {
-                generatedClass.addType(generateParseModelUserElementClass(packageName, userAnnotatedClass));
+                generatedClass.addType(
+                        ModelUserElementCodeGenerator.generate(packageName, userAnnotatedClass).build());
             }
 
             JavaFile javaFile = JavaFile.builder(packageName, generatedClass.build()).build();
@@ -101,7 +93,7 @@ public class ParseModelProcessor extends AbstractProcessor {
         } catch (Exception e) {
             Logger.getInstance().error(e.getMessage());
         }
-        return true;
     }
+
 
 }

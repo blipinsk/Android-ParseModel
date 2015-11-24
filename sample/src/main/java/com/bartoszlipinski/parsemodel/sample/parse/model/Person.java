@@ -10,5 +10,6 @@ public class Person {
     String name;
     String surname;
     Date birthDate;
+    int height;
     ParseFile photo;
 }

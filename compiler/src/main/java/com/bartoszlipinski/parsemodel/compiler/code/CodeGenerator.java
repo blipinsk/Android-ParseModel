@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bartoszlipinski.parsemodel.compiler.exception;
+package com.bartoszlipinski.parsemodel.compiler.code;
 
-public class TooManyParseUserClassAnnotatedException extends Exception {
-    public TooManyParseUserClassAnnotatedException() {
-        super("There can only be one class annotated with @ParseUserClass.");
-    }
+public abstract class CodeGenerator {
+
+    protected static final String STATIC_KEY_FIELD = "KEY_";
+
+    protected static final String SETTER_METHOD_NAME = "set";
+
+    protected static final String GETTER_METHOD_NAME = "get";
+
+    public static final String USER_FIELD_NAME = "mParseUser";
+
 }

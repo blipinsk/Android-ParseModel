@@ -15,7 +15,7 @@
  */
 package com.bartoszlipinski.parsemodel.compiler.field;
 
-import com.bartoszlipinski.parsemodel.compiler.CodeGenerator;
+import com.bartoszlipinski.parsemodel.compiler.code.CodeGenerator;
 import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
