@@ -15,33 +15,20 @@
  */
 package com.bartoszlipinski.parsemodel.compiler;
 
-import com.bartoszlipinski.parsemodel.ParseClass;
-import com.bartoszlipinski.parsemodel.ParseUserClass;
-import com.bartoszlipinski.parsemodel.compiler.exception.TooManyParseUserClassAnnotatedException;
-import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
 import com.bartoszlipinski.parsemodel.compiler.generator.BaseGenerator;
 import com.bartoszlipinski.parsemodel.compiler.generator.ParseModelGenerator;
+import com.bartoszlipinski.parsemodel.compiler.utils.Logger;
 import com.google.auto.service.AutoService;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
-import static com.bartoszlipinski.parsemodel.compiler.generator.ParseModelGenerator.generateParseModelClass;
-import static com.bartoszlipinski.parsemodel.compiler.generator.ParseModelGenerator.generateParseModelElementClass;
-import static com.bartoszlipinski.parsemodel.compiler.generator.ParseModelGenerator.generateParseModelUserElementClass;
-import static java.util.Collections.singleton;
 import static javax.lang.model.SourceVersion.latestSupported;
 
 @AutoService(Processor.class)

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bartoszlipinski.parsemodel.compiler;
+package com.bartoszlipinski.parsemodel.compiler.utils;
 
 import com.bartoszlipinski.parsemodel.compiler.exception.UnsupportedFieldTypeException;
 import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
