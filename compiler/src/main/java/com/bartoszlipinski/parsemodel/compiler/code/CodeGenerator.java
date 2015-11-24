@@ -23,6 +23,4 @@ public abstract class CodeGenerator {
 
     protected static final String GETTER_METHOD_NAME = "get";
 
-    public static final String USER_FIELD_NAME = "mParseUser";
-
 }
