@@ -15,7 +15,7 @@
  */
 package com.bartoszlipinski.parsemodel.compiler.utils;
 
-import com.bartoszlipinski.parsemodel.WrapperBuilder;
+import com.bartoszlipinski.parsemodel.ParseWrapperClass;
 import com.bartoszlipinski.parsemodel.compiler.code.WrapperModelElementCodeGenerator;
 import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
 
@@ -44,8 +44,8 @@ public class AnnotatedWrapperClass extends AnnotatedClass {
     }
 
     private static String[] validateAnnotation(TypeElement annotatedElement) {
-        final WrapperBuilder annotation =
-                annotatedElement.getAnnotation(WrapperBuilder.class);
+        final ParseWrapperClass annotation =
+                annotatedElement.getAnnotation(ParseWrapperClass.class);
         String canonicalName;
         String shortName;
         try {

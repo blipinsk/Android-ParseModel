@@ -1,11 +1,11 @@
 package com.bartoszlipinski.parsemodel.sample.parse.model;
 
-import com.bartoszlipinski.parsemodel.Builder;
+import com.bartoszlipinski.parsemodel.ParseClass;
 import com.parse.ParseFile;
 
 import java.util.Date;
 
-@Builder
+@ParseClass
 public class Person {
     String name;
     String surname;

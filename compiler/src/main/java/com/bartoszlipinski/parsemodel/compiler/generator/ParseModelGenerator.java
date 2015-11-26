@@ -15,8 +15,8 @@
  */
 package com.bartoszlipinski.parsemodel.compiler.generator;
 
-import com.bartoszlipinski.parsemodel.Builder;
-import com.bartoszlipinski.parsemodel.WrapperBuilder;
+import com.bartoszlipinski.parsemodel.ParseClass;
+import com.bartoszlipinski.parsemodel.ParseWrapperClass;
 import com.bartoszlipinski.parsemodel.compiler.code.ModelCodeGenerator;
 import com.bartoszlipinski.parsemodel.compiler.code.ModelElementCodeGenerator;
 import com.bartoszlipinski.parsemodel.compiler.code.WrapperModelElementCodeGenerator;
@@ -41,7 +41,7 @@ public class ParseModelGenerator extends BaseGenerator {
 
     @Override
     public Class[] getAnnotations() {
-        return new Class[]{Builder.class, WrapperBuilder.class};
+        return new Class[]{ParseClass.class, ParseWrapperClass.class};
     }
 
     @Override
@@ -49,10 +49,10 @@ public class ParseModelGenerator extends BaseGenerator {
         try {
             List<AnnotatedClass> builderClasses = new ArrayList<>();
 
-            for (Element element : roundEnv.getElementsAnnotatedWith(Builder.class)) {
+            for (Element element : roundEnv.getElementsAnnotatedWith(ParseClass.class)) {
                 builderClasses.add(AnnotatedClass.with((TypeElement) element));
             }
-            for (Element element : roundEnv.getElementsAnnotatedWith(WrapperBuilder.class)) {
+            for (Element element : roundEnv.getElementsAnnotatedWith(ParseWrapperClass.class)) {
                 builderClasses.add(AnnotatedWrapperClass.with((TypeElement) element));
             }
 

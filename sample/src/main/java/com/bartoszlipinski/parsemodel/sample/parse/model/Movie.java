@@ -1,12 +1,12 @@
 package com.bartoszlipinski.parsemodel.sample.parse.model;
 
-import com.bartoszlipinski.parsemodel.Builder;
+import com.bartoszlipinski.parsemodel.ParseClass;
 import com.parse.ParseFile;
 
 import java.util.Date;
 import java.util.List;
 
-@Builder
+@ParseClass
 final class Movie {
     String title;
     long length;
