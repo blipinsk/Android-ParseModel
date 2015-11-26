@@ -15,7 +15,6 @@
  */
 package com.bartoszlipinski.parsemodel.compiler.field;
 
-import com.bartoszlipinski.parsemodel.compiler.code.CodeGenerator;
 import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
@@ -60,7 +59,7 @@ public class BaseFieldType extends FieldType {
 
     private static final String GETTER_STATEMENT_BASE = "return get%s($L)";
 
-    private static final String USER_GETTER_STATEMENT_BASE = "return " + CodeGenerator.USER_FIELD_NAME + ".get%s($L)";
+    private static final String WRAPPER_GETTER_STATEMENT_BASE = "return %s.get%s($L)";
 
     protected BaseFieldType(TypeName typeName, String statementArg) {
         super(typeName, statementArg);
@@ -72,8 +71,8 @@ public class BaseFieldType extends FieldType {
     }
 
     @Override
-    protected String getUserGetterStatementBase() {
-        return String.format(USER_GETTER_STATEMENT_BASE, mStatementArg);
+    protected String getWrapperGetterStatementBase(String wrappedFieldName) {
+        return String.format(WRAPPER_GETTER_STATEMENT_BASE,wrappedFieldName, mStatementArg);
     }
 
 }

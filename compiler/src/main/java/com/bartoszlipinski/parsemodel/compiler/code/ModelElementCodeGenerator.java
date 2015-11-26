@@ -15,8 +15,8 @@
  */
 package com.bartoszlipinski.parsemodel.compiler.code;
 
-import com.bartoszlipinski.parsemodel.compiler.utils.AnnotatedClass;
 import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
+import com.bartoszlipinski.parsemodel.compiler.utils.AnnotatedClass;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.squareup.javapoet.AnnotationSpec;
@@ -47,11 +47,11 @@ public class ModelElementCodeGenerator extends CodeGenerator {
 
     private static final String SETTER_METHOD_STATEMENT = "put($L, $L)";
 
-    public static TypeSpec.Builder generate(String packageName, AnnotatedClass annotated){
+    public static TypeSpec.Builder generate(String packageName, AnnotatedClass annotated) {
         String classNameUC = UPPER_CAMEL.to(UPPER_CAMEL, annotated.mShortClassName); //to be sure
 
         ClassName parseQuery = ClassName.get("com.parse", "ParseQuery");
-        ClassName thisElement = ClassName.get(packageName, classNameUC);
+        ClassName thisElement = ClassName.get("", classNameUC);
         TypeName parseQueryOfThisElement = ParameterizedTypeName.get(parseQuery, thisElement);
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(classNameUC)

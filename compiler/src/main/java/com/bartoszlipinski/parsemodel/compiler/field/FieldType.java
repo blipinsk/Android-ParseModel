@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Bartosz Lipinski
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,14 +56,14 @@ public abstract class FieldType {
 
     protected abstract String getGetterStatementBase();
 
-    protected abstract String getUserGetterStatementBase();
+    protected abstract String getWrapperGetterStatementBase(String wrappedFieldName);
 
     public final MethodSpec.Builder addGetterStatements(MethodSpec.Builder methodBuilder, String keyVariableName) {
         return methodBuilder.addStatement(getGetterStatementBase(), keyVariableName);
     }
 
-    public final MethodSpec.Builder addUserGetterStatements(MethodSpec.Builder methodBuilder, String keyVariableName) {
-        return methodBuilder.addStatement(getUserGetterStatementBase(), keyVariableName);
+    public final MethodSpec.Builder addWrapperGetterStatements(MethodSpec.Builder methodBuilder, String wrappedFieldName, String keyVariableName) {
+        return methodBuilder.addStatement(getWrapperGetterStatementBase(wrappedFieldName), keyVariableName);
     }
 
     public static void addAnnotatedClassName(String fullClassName, String shortClassName) {
@@ -124,7 +124,7 @@ public abstract class FieldType {
                     if (typeName instanceof ParameterizedTypeName) {
                         ParameterizedTypeName parametrized = (ParameterizedTypeName) typeName;
                         ClassName rawType = parametrized.rawType;
-                        TypeName parameterType= parametrized.typeArguments.get(0);
+                        TypeName parameterType = parametrized.typeArguments.get(0);
                         if (BaseFieldType.LIST.fits(rawType) && parametrized.typeArguments.size() == 1) {
                             if (isOtherAnnotatedClass(parameterType)) {
                                 parameterType = getAnnotatedClassShortTypeName(parameterType);
@@ -138,7 +138,7 @@ public abstract class FieldType {
                         } else if (BaseFieldType.MAP.fits(rawType) &&
                                 parametrized.typeArguments.size() == 2 &&
                                 parametrized.typeArguments.get(0).equals(BaseFieldType.STRING.getTypeName())) {
-                            parameterType= parametrized.typeArguments.get(1);
+                            parameterType = parametrized.typeArguments.get(1);
                             if (isOtherAnnotatedClass(parameterType)) {
                                 parameterType = getAnnotatedClassShortTypeName(parameterType);
                             }
@@ -150,7 +150,7 @@ public abstract class FieldType {
                         if (isOtherAnnotatedClass(typeName)) {
                             String castedTo = getAnnotatedClassShortName(typeName);
                             return CastedFieldType.with(
-                                    ClassName.get(sPackageName, castedTo),
+                                    ClassName.get("", castedTo),
                                     castedTo,
                                     BaseFieldType.PARSE_OBJECT.mStatementArg);
                         }

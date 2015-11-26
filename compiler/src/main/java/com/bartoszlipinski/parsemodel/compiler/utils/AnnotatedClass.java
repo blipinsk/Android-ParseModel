@@ -32,14 +32,14 @@ public class AnnotatedClass {
     public List<String> mFieldNames;
     public List<FieldType> mFieldTypes;
 
-    private AnnotatedClass(TypeElement typeElement) {//, List<String> fieldNames, List<FieldType> fieldTypes) {
-        this.mTypeElement = typeElement;
-        this.mShortClassName = typeElement.getSimpleName().toString();
-    }
-
     public static AnnotatedClass with(TypeElement annotatedElement) {
         FieldType.addAnnotatedClassName(annotatedElement.getQualifiedName().toString(), annotatedElement.getSimpleName().toString());
         return new AnnotatedClass(annotatedElement);
+    }
+
+    protected AnnotatedClass(TypeElement typeElement) {//, List<String> fieldNames, List<FieldType> fieldTypes) {
+        this.mTypeElement = typeElement;
+        this.mShortClassName = typeElement.getSimpleName().toString();
     }
 
     public void processFields() throws UnsupportedFieldTypeException {

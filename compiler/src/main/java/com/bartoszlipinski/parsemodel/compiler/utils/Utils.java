@@ -23,17 +23,13 @@ import javax.lang.model.util.Elements;
 
 public final class Utils {
 
-    public static String getMainPackageName(Elements elementUtils, List<AnnotatedClass> annotatedClasses, AnnotatedClass userAnnotatedClass)
+    public static String getMainPackageName(Elements elementUtils, List<AnnotatedClass> annotatedClasses)
             throws com.bartoszlipinski.parsemodel.compiler.exception.NoPackageNameException {
 
         String mainPackageName = null;
         for (AnnotatedClass annotatedClass : annotatedClasses) {
             mainPackageName = getMainPackage(elementUtils, mainPackageName, annotatedClass);
         }
-        if (userAnnotatedClass != null) {
-            mainPackageName = getMainPackage(elementUtils, mainPackageName, userAnnotatedClass);
-        }
-
         if (mainPackageName == null) {
             throw new com.bartoszlipinski.parsemodel.compiler.exception.NoPackageNameException(annotatedClasses.get(0).mTypeElement);
         }
