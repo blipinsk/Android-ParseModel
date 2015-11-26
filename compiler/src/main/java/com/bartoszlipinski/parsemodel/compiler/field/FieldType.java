@@ -150,7 +150,7 @@ public abstract class FieldType {
                         if (isOtherAnnotatedClass(typeName)) {
                             String castedTo = getAnnotatedClassShortName(typeName);
                             return CastedFieldType.with(
-                                    ClassName.get(sPackageName, castedTo),
+                                    ClassName.get("", castedTo),
                                     castedTo,
                                     BaseFieldType.PARSE_OBJECT.mStatementArg);
                         }

@@ -52,7 +52,7 @@ public class WrapperModelElementCodeGenerator extends CodeGenerator {
 
     public static TypeSpec.Builder generate(String packageName, AnnotatedWrapperClass annotated) {
         String classNameUC = UPPER_CAMEL.to(UPPER_CAMEL, annotated.mShortClassName); //to be sure
-        ClassName thisElement = ClassName.get(packageName, classNameUC);
+        ClassName thisElement = ClassName.get("", classNameUC);
         ClassName wrappedClass = ClassName.get(annotated.mWrappedPackageName, annotated.mWrappedShortName);
         String wrappedClassUC = UPPER_CAMEL.to(UPPER_CAMEL, annotated.mWrappedShortName);
         String wrappedClassLC = UPPER_CAMEL.to(LOWER_CAMEL, annotated.mWrappedShortName);
