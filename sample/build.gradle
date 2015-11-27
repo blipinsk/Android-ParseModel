@@ -1,23 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt' // <-- THIS IS IMPORTANT
 
-repositories {
-    maven {
-        url 'https://dl.bintray.com/blipinsk/maven/'
-        // you probably don't really need that - its only needed if the current version is not yet available in jcenter
-    }
-}
+def cfg = rootProject.ext.configuration
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
 
     defaultConfig {
         applicationId "com.bartoszlipinski.parsemodel.sample"
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 0
-        versionName "0.0.0"
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode cfg.versionCode
+        versionName cfg.versionName
     }
     buildTypes {
         release {
@@ -30,12 +25,13 @@ android {
 dependencies {
 //    really NOT important comments:
 //    --
-//    compile project(':annotations')
-//    apt project(':compiler')
+//    compile project(':parsemodel')
+//    apt project(':parsemodel-compiler')
 //    --
 
-    compile 'com.bartoszlipinski:parsemodel:0.0.3-alpha' // <-- THIS IS ALSO IMPORTANT
-    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.3-alpha' // <-- AND THIS AS WELL
+    compile 'com.bartoszlipinski:parsemodel:0.0.4' // <-- THIS IS ALSO IMPORTANT
+    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.4' // <-- AND THIS AS WELL
+
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.parse.bolts:bolts-android:1.2.1'

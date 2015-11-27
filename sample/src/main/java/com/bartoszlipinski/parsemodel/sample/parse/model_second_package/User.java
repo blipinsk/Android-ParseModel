@@ -1,9 +1,10 @@
 package com.bartoszlipinski.parsemodel.sample.parse.model_second_package;
 
-import com.bartoszlipinski.parsemodel.ParseUserClass;
+import com.bartoszlipinski.parsemodel.ParseWrapperClass;
+import com.parse.ParseUser;
 
-@ParseUserClass
+@ParseWrapperClass(ParseUser.class)
 public class User {
-    String name;
+    String fullName;
     int age;
 }
