@@ -5,7 +5,6 @@ import com.parse.ParseUser;
 
 @ParseWrapperClass(ParseUser.class)
 public class User {
-    String name;
+    String fullName;
     int age;
-    float test;
 }

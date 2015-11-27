@@ -2,6 +2,7 @@ Android-ParseModel
 ==================
 
 [![License](https://img.shields.io/github/license/blipinsk/RecyclerViewHeader.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--ParseModel-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2627)
 [![Maven Central](https://img.shields.io/maven-central/v/com.bartoszlipinski/parsemodel.svg)](http://gradleplease.appspot.com/#parsemodel)
 [![Bintray](https://img.shields.io/bintray/v/blipinsk/maven/Android-ParseModel.svg)](https://bintray.com/blipinsk/maven/Android-ParseModel/_latestVersion)
 
@@ -74,26 +75,12 @@ and generate this:
             return getParseFile(KEY_PHOTO);
         }
     }
-        
-
-About the release
-=================
-(or in other words: why is it marked as `alpha`?)
-
-**TLDR:** ***Library functions are working correctly, don't be afraid to use it. I just still haven't decided if I like the compiler output. This might change in the future.***
-
-Although the library should work correctly (it should correctly generate Parse SDK model), I decided that the current state is far from being out of the development stage. I decided to release it right now (in the current form), because I know it can be very useful for many developers (already, as it is). I don't think any of the library functionality will change (only some new feature can be introduced; feel free to add an issue with a needed feature). There are few things I need to do before I move to the first "production" version of the library:
-
-  1. Introduce code validator.
-  2. Do a refactoring of the compiler code.
-  3. Decide whether I should stay with current annotation names, or change them (maybe to `@ParseModelBuilder`?)
-  4. Decide if I'm fine with the current `ParseModel` code organization (maybe instead of `ParseModel` inner classes a set of separate classes should be generated?).
 
 Usage
 =====
 *For a working implementation of this library see the `sample/` folder.*
 
-There are two annotations in the library: `@ParseClass` and `@ParseUserClass`. You should use the latter one for your `User` model (it works a bit differently).
+There are two annotations in the library: `@ParseClass` and `@ParseWrapperClass`. You should use the latter one for your `User`, `Installation` and `Session` model (it works a bit differently).
 *Classes annotated with any of those two annotations are later being called `Android-ParseModel` `builder` classes*
 
 Create a `builder` class for any of your Parse Data classes:
@@ -119,9 +106,9 @@ Create a `builder` class for any of your Parse Data classes:
         person.setName("Bartosz");
         person.saveInBackground();
 
-If you want to generate a `ParseModel` class for your `Parse` `User`, follow the exact same steps but use `@ParseUserClass` annotation (instead of  `@ParseClass`). This annotation generates code a bit differently. E.g. this `User` `builder` class:
+If you want to generate a `ParseModel` class for your `Parse` `User`, `Installation` or `Session` follow the exact same steps but use `@ParseWrapperClass` annotation (instead of  `@ParseClass`). This annotation generates code a bit differently. E.g. this `User` `builder` class:
 
-    @ParseUserClass
+    @ParseWrapperClass(ParseUser.class)
     public class User {
         String fullName;
         int age;
@@ -131,42 +118,41 @@ will result in generation of this:
 
     public static class User {
         public static final String KEY_FULL_NAME = "fullName";
-        
+    
         public static final String KEY_AGE = "age";
-        
+    
         private final ParseUser mParseUser;
-        
+    
         public User(ParseUser parseUser) {
-            mParseUser = parseUser;
-            mParseUser.fetchInBackground();
+          mParseUser = parseUser;
         }
-        
+    
         public static User with(ParseUser parseUser) {
-            return new User(parseUser);
+          return new User(parseUser);
         }
-        
-        public static User getCurrentUser() {
-            return ParseUser.getCurrentUser() != null ? User.with(ParseUser.getCurrentUser()) : null;
-        }
-        
+    
         public ParseUser get() {
-            return mParseUser;
+          return mParseUser;
         }
-        
+    
+        public static User getCurrent() {
+          return ParseUser.getCurrentUser() != null ? User.with(ParseUser.getCurrentUser()) : null;
+        }
+    
         public final void setFullName(String fullName) {
-            mParseUser.put(KEY_FULL_NAME, fullName);
+          mParseUser.put(KEY_FULL_NAME, fullName);
         }
-        
+    
         public final String getFullName() {
-            return mParseUser.getString(KEY_FULL_NAME);
+          return mParseUser.getString(KEY_FULL_NAME);
         }
-        
+    
         public final void setAge(int age) {
-            mParseUser.put(KEY_AGE, age);
+          mParseUser.put(KEY_AGE, age);
         }
-        
+    
         public final int getAge() {
-            return mParseUser.getInt(KEY_AGE);
+          return mParseUser.getInt(KEY_AGE);
         }
     }
         
@@ -201,18 +187,8 @@ and dependencies (also in your application gradle):
 
 ```xml
 dependencies {
-    compile 'com.bartoszlipinski:parsemodel:0.0.3-alpha'
-    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.3-alpha'
-}
-```
-
-***additionally***: *(if the current version is not available in central repository yet) add this as well:*
-
-```xml
-repositories {
-    maven {
-        url 'https://dl.bintray.com/blipinsk/maven/'
-    }
+    compile 'com.bartoszlipinski:parsemodel:0.0.4'
+    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.4'
 }
 ```
 

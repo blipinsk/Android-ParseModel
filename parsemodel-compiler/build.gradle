@@ -1,11 +1,14 @@
 apply plugin: 'java'
-apply plugin: 'bintray-release'
+apply plugin: 'com.novoda.bintray-release'
+
+def cfg = rootProject.ext.configuration
+def bintrayCfg = rootProject.ext.bintrayConfig
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    compile project(':annotations')
+    compile project(':parsemodel')
     compile 'com.google.auto.service:auto-service:1.0-rc2'
     compile 'com.squareup:javapoet:1.4.0'
     compile 'com.google.guava:guava:18.0'
@@ -16,12 +19,12 @@ dependencies {
 }
 
 publish {
-    artifactId = 'parsemodel-compiler'
-    userOrg = rootProject.userOrg
-    groupId = rootProject.groupId
-    uploadName = rootProject.uploadName
-    publishVersion = rootProject.publishVersion
-    description = rootProject.description
-    website = rootProject.website
-    licences = rootProject.licences
+    artifactId = bintrayCfg.artifactCompiler
+    userOrg = bintrayCfg.userOrg
+    groupId = bintrayCfg.groupId
+    uploadName = bintrayCfg.name
+    publishVersion = cfg.versionName
+    desc = bintrayCfg.description
+    website = bintrayCfg.website
+    licences = bintrayCfg.licences
 }
