@@ -31,7 +31,6 @@ public abstract class FieldType {
 
     private static List<String> sAnnotatedFullClassNames = new ArrayList<>();
     private static List<String> sAnnotatedShortClassNames = new ArrayList<>();
-    private static String sPackageName = "";
 
     final TypeName mTypeName;
     final String mStatementArg;
@@ -71,10 +70,6 @@ public abstract class FieldType {
             sAnnotatedFullClassNames.add(fullClassName);
             sAnnotatedShortClassNames.add(shortClassName);
         }
-    }
-
-    public static void setPackageName(String packageName) {
-        sPackageName = packageName;
     }
 
     public static FieldType with(TypeMirror mirror) {
@@ -176,7 +171,7 @@ public abstract class FieldType {
     private static ClassName getAnnotatedClassShortTypeName(TypeName typeName) {
         String shortName = getAnnotatedClassShortName(typeName);
         if (shortName != null) {
-            return ClassName.get(sPackageName, shortName);
+            return ClassName.get("", shortName);
         }
         return null;
     }

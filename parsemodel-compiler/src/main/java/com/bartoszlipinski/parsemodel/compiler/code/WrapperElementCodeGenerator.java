@@ -33,7 +33,7 @@ import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
  * Created by Bartosz Lipinski
  * 24.11.2015
  */
-public class WrapperModelElementCodeGenerator extends CodeGenerator {
+public class WrapperElementCodeGenerator extends CodeGenerator {
     public final static AllowedClass[] ALLOWED_CLASSES = {
             AllowedClass.with("com.parse", "ParseUser")
                     .withGetCurrentStatement(
