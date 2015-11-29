@@ -55,14 +55,11 @@ public class ParseModelGenerator extends BaseGenerator {
             for (Element element : roundEnv.getElementsAnnotatedWith(ParseWrapperClass.class)) {
                 builderClasses.add(AnnotatedWrapperClass.with((TypeElement) element));
             }
-
-            String packageName = Utils.getMainPackageName(processingEnv.getElementUtils(), builderClasses);
-            FieldType.setPackageName(packageName);
-
             for (AnnotatedClass annotatedClass : builderClasses) {
                 annotatedClass.processFields();
             }
 
+            String packageName = Utils.getMainPackageName(processingEnv.getElementUtils(), builderClasses);
             TypeSpec.Builder generatedClass = ModelCodeGenerator.generate();
             generatedClass.addType(
                     BaseCodeGenerator.generate().build());
