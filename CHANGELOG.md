@@ -1,3 +1,11 @@
+Version 0.0.4 *(2015-11-27)*
+----------------------------
+
+ * Compiler refactored
+ * Annotation names changed (@ParseUserClass is now part of the @ParseWrapperClass)
+ * Managing Parse Session and Installation objects
+ * Integration with Javapoet 1.4.0
+
 Version 0.0.3-alpha *(2015-10-11)*
 ----------------------------
 
