@@ -23,7 +23,7 @@ With a simple annotation `@ParseClass` you can take this:
 and generate this:
         
     @ParseClassName("Person")
-    public static class Person extends ParseObject {
+    public static class Person extends ParseBaseObject {
     
         public static final String KEY_NAME = "name";
     
