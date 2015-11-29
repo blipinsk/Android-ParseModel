@@ -23,4 +23,6 @@ public abstract class CodeGenerator {
 
     protected static final String GETTER_METHOD_NAME = "get";
 
+    protected static final String PARSE_BASE_OBJECT = "ParseBaseObject";
+
 }

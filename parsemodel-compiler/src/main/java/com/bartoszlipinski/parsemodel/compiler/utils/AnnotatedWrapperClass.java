@@ -16,7 +16,7 @@
 package com.bartoszlipinski.parsemodel.compiler.utils;
 
 import com.bartoszlipinski.parsemodel.ParseWrapperClass;
-import com.bartoszlipinski.parsemodel.compiler.code.WrapperModelElementCodeGenerator;
+import com.bartoszlipinski.parsemodel.compiler.code.WrapperElementCodeGenerator;
 import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
 
 import javax.lang.model.element.TypeElement;
@@ -58,15 +58,15 @@ public class AnnotatedWrapperClass extends AnnotatedClass {
             canonicalName = classTypeElement.getQualifiedName().toString();
             shortName = classTypeElement.getSimpleName().toString();
         }
-        if (!contains(WrapperModelElementCodeGenerator.ALLOWED_CLASSES, canonicalName)) {
+        if (!contains(WrapperElementCodeGenerator.ALLOWED_CLASSES, canonicalName)) {
             Logger.getInstance().error("You cannot create a WrapperModel with " + canonicalName +
-                    ". See allowed classes in " + WrapperModelElementCodeGenerator.class.getSimpleName() + ".ALLOWED_CLASSES");
+                    ". See allowed classes in " + WrapperElementCodeGenerator.class.getSimpleName() + ".ALLOWED_CLASSES");
         }
         final String packageName = canonicalName.substring(0, canonicalName.length() - shortName.length() - 1);
         return new String[]{packageName, shortName};
     }
 
-    private static boolean contains(WrapperModelElementCodeGenerator.AllowedClass[] array, String className) {
+    private static boolean contains(WrapperElementCodeGenerator.AllowedClass[] array, String className) {
         for (int i = 0; i < array.length; ++i) {
             if (array[i].getCanonicalName().equals(className)) {
                 return true;

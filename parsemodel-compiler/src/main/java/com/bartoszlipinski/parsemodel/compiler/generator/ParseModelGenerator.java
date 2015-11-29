@@ -17,10 +17,10 @@ package com.bartoszlipinski.parsemodel.compiler.generator;
 
 import com.bartoszlipinski.parsemodel.ParseClass;
 import com.bartoszlipinski.parsemodel.ParseWrapperClass;
+import com.bartoszlipinski.parsemodel.compiler.code.BaseCodeGenerator;
 import com.bartoszlipinski.parsemodel.compiler.code.ModelCodeGenerator;
-import com.bartoszlipinski.parsemodel.compiler.code.ModelElementCodeGenerator;
-import com.bartoszlipinski.parsemodel.compiler.code.WrapperModelElementCodeGenerator;
-import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
+import com.bartoszlipinski.parsemodel.compiler.code.ElementCodeGenerator;
+import com.bartoszlipinski.parsemodel.compiler.code.WrapperElementCodeGenerator;
 import com.bartoszlipinski.parsemodel.compiler.utils.AnnotatedClass;
 import com.bartoszlipinski.parsemodel.compiler.utils.AnnotatedWrapperClass;
 import com.bartoszlipinski.parsemodel.compiler.utils.Logger;
@@ -59,18 +59,20 @@ public class ParseModelGenerator extends BaseGenerator {
             String packageName = Utils.getMainPackageName(processingEnv.getElementUtils(), builderClasses);
             FieldType.setPackageName(packageName);
 
-            for (AnnotatedClass annotatedClass : builderClasses) { //we need to have all annotated class names before we can process fields
+            for (AnnotatedClass annotatedClass : builderClasses) {
                 annotatedClass.processFields();
             }
 
             TypeSpec.Builder generatedClass = ModelCodeGenerator.generate();
+            generatedClass.addType(
+                    BaseCodeGenerator.generate().build());
             for (AnnotatedClass annotatedClass : builderClasses) {
                 if (annotatedClass instanceof AnnotatedWrapperClass) {
                     generatedClass.addType(
-                            WrapperModelElementCodeGenerator.generate(packageName, (AnnotatedWrapperClass) annotatedClass).build());
+                            WrapperElementCodeGenerator.generate(packageName, (AnnotatedWrapperClass) annotatedClass).build());
                 } else {
                     generatedClass.addType(
-                            ModelElementCodeGenerator.generate(packageName, annotatedClass).build());
+                            ElementCodeGenerator.generate(annotatedClass).build());
                 }
             }
             JavaFile javaFile = JavaFile.builder(packageName, generatedClass.build()).build();

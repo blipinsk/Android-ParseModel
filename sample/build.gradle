@@ -25,12 +25,12 @@ android {
 dependencies {
 //    really NOT important comments:
 //    --
-//    compile project(':parsemodel')
-//    apt project(':parsemodel-compiler')
+    compile project(':parsemodel')
+    apt project(':parsemodel-compiler')
 //    --
 
-    compile 'com.bartoszlipinski:parsemodel:0.0.4' // <-- THIS IS ALSO IMPORTANT
-    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.4' // <-- AND THIS AS WELL
+//    compile 'com.bartoszlipinski:parsemodel:0.0.4' // <-- THIS IS ALSO IMPORTANT
+//    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.4' // <-- AND THIS AS WELL
 
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.google.code.gson:gson:2.4'

@@ -18,7 +18,6 @@ package com.bartoszlipinski.parsemodel.compiler.code;
 import com.bartoszlipinski.parsemodel.compiler.field.FieldType;
 import com.bartoszlipinski.parsemodel.compiler.utils.AnnotatedClass;
 import com.parse.ParseClassName;
-import com.parse.ParseObject;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
@@ -38,7 +37,7 @@ import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
  * Created by Bartosz Lipinski
  * 24.11.2015
  */
-public class ModelElementCodeGenerator extends CodeGenerator {
+public class ElementCodeGenerator extends CodeGenerator {
 
     private static final String STATIC_BLOCK_STATEMENT = "ParseObject.registerSubclass($L.class)";
 
@@ -47,7 +46,7 @@ public class ModelElementCodeGenerator extends CodeGenerator {
 
     private static final String SETTER_METHOD_STATEMENT = "put($L, $L)";
 
-    public static TypeSpec.Builder generate(String packageName, AnnotatedClass annotated) {
+    public static TypeSpec.Builder generate(AnnotatedClass annotated) {
         String classNameUC = UPPER_CAMEL.to(UPPER_CAMEL, annotated.mShortClassName); //to be sure
 
         ClassName parseQuery = ClassName.get("com.parse", "ParseQuery");
@@ -55,7 +54,7 @@ public class ModelElementCodeGenerator extends CodeGenerator {
         TypeName parseQueryOfThisElement = ParameterizedTypeName.get(parseQuery, thisElement);
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(classNameUC)
-                .superclass(ParseObject.class)
+                .superclass(ClassName.get("", PARSE_BASE_OBJECT))
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addMethod(MethodSpec.constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
