@@ -187,8 +187,8 @@ and dependencies (also in your application gradle):
 
 ```xml
 dependencies {
-    compile 'com.bartoszlipinski:parsemodel:0.0.4'
-    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.4'
+    compile 'com.bartoszlipinski:parsemodel:0.0.5'
+    apt 'com.bartoszlipinski:parsemodel-compiler:0.0.5'
 }
 ```
 
