@@ -1,6 +1,6 @@
 # DEPRECATED
 
-`Android-ParseModel` is deprecated. It's due to the recent decision about the [retirement of the Parse platform](http://blog.parse.com/announcements/moving-on/).
+Due to the recent decision about the [retirement of the Parse platform](http://blog.parse.com/announcements/moving-on/), `Android-ParseModel` has been deprecated. 
 No new development will be taking place. The library will not be maintained.
 
 Thanks for all the support!
